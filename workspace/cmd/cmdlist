@@ -1,0 +1,2 @@
+ls -l | tee file.txt | less
+ls --- 2> error.txt

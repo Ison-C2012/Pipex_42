@@ -1,0 +1,9 @@
+$>echo a > a
+$>cat a
+a
+$>cat a > b
+$>cat b
+a
+$>cat a > a
+$>cat a
+$>
