@@ -1,0 +1,39 @@
+<fcntl.h>
+int		open(const char *pathname, int flags);
+
+<sys/stat.h>
+int		open(const char *pathname, int flags);
+
+<unistd.h>
+int		close(int fd);
+ssize_t	read(int fd, void *buf, size_t count);
+ssize_t	write(int fd, void *buf, size_t count);
+int		access(const cahr *pathname, int mode);
+int		dup(int oldfd);
+int		dup2(int oldfd, int newfd);
+int		execve(const char *pathname, char *const argv[], char *const envp[]);
+pid_t	fork(void);
+int		pipe(int pipefd[2]);
+int		unlink(const char *pathname);
+
+<sys/types.h>
+pid_t	fork(void);
+pid_t	wait(int *wstatus);
+pid_t	waitpid(pid_t pid, int *wstatus, int options);
+
+<sys/wait.h>
+pid_t	wait(int *wstatus);
+pid_t	waitpid(pid_t pid, int *wstatus, int options);
+
+
+<stdlib.h>
+void	*malloc(size_t size);
+void	free(void *ptr);
+void	exit(int status);
+
+<stdio.h>
+void	perror(const char *s);
+
+<string.h>
+char	*strerror(int errnum);
+
