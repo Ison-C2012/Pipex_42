@@ -1,0 +1,95 @@
+Pipex docs
+
+Chapter I
+Foreword
+Cristina: "Go dance salsa somewhere! :)"
+
+/*Who is Cristina?/*
+
+Chapter II
+Common Instructions
+.written in c
+.in accordance with Norm, including bonus
+.not quit unexpectedly except for undefined behavior
+.no memory leaks
+.submit Makefile if required, with flags "-Wall -Wextra -Werror", using "cc", no relinking
+.Makefile must contain the rules $(NAME), all, clean, fclean
+.add bonus rule to Makefile and place in _bonus.{c/h} files to submit bonuses
+.copy libft's sources and its associated Makefile  into a libft folder
+.Makefile must compile the library(libft) by using its Makefile(libft/Makefile), then compile the project
+.suggest to create tests
+.submit to the assigned Git repository
+
+/*First: Makefile in libft, Next: Makefile in your project*/
+
+Chapter IV
+Mandatory part
+
+Table
+program name		pipx
+turn in files		Makefile, *.h, *.c
+Makefile rules		NAME, all, clean, fclean, re
+arguments		file1 cmd1 cmd2 file2
+external funcs.		.open, close, read, write, malloc, free, perror, strerror, access,
+			 dup, dup2, excve, exit, fork, pipe, unlink, wait, waitpid
+			.ft_printf or any equivalent YOU coded
+libft authorized	yes
+description		this project focuses on handling pipes.
+
+
+Execution
+./pipex file1 cmd1 cmd2 file2
+
+Arguments
+.file1 and file2 are file name.
+.cmd1 and cmd2 are shell commands with their parameters.
+
+Behavior (exactly like the following shell commands)
+$> < file1 cmd1 | cmd2 > file2
+
+Example
+$> ./pipex infile "grep a1" "wc -w" outfile
+equivalent to: 
+$> < infile grep a1 | wc -w > outfile
+
+
+Requirements
+.submit a Makefile
+.no relink using Makefile
+.no unexpected termination (e.g., segmentation fault, bus error, double free, etc.)
+.no memory leaks
+.if you are unsure, handle errors the same way as the shell command: < file1 cmd1 | cmd2 > file2
+
+
+Chapter VI
+Submission and peer-evaluation
+
+To submit your assignment in your Git repository.
+To double check the names of your files to ensure they are correct.
+A brief modification of the project may occasionally be requested.
+See details in the evaluation guidelines.
+
+code:
+file.bfe:VACsSfsWN1cy33ROeASsmsgnY0o0sDMJev7zFHhw
+QS8mvM8V5xQQpLc6cDCFXDWTiFzZ2H9skYkiJ/DpQtnM/uZ0
+
+
+/*=================================================================================================*/
+pipe and redirect
+
+pipe:
+
+
+
+redirect:
+
+
+
+
+
+
+
+
+
+
+
