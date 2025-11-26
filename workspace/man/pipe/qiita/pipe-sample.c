@@ -69,6 +69,11 @@ int	popen2(int *fd_r, int *fd_w)
 	return (pid);
 }
 
+/*
+ input: hello
+ output: test2:test1: hello
+*/
+
 int	main(int argc, char *argv[])
 {
 	int	fd_r = fileno(stdin);
@@ -83,7 +88,7 @@ int	main(int argc, char *argv[])
 	if (popen2(&fd_r, &fd_w) == 1)
 		return 1;
 
-	write(fd_w, argv[1], strlen(argv[1]));
+	write(fd_w, argv[1], strlen(argv[1]));	//input: hello
 
 	char	buf[255];
 	int		size = read(fd_r, buf, 255);
@@ -94,6 +99,6 @@ int	main(int argc, char *argv[])
 		return 1;
 	}
 	printf("test2:");
-	fwrite(buf, 1, size, stdout);
+	fwrite(buf, 1, size, stdout);	//output: test1: hello
 	printf("\n");
 }
