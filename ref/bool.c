@@ -6,14 +6,14 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 17:40:07 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/01 17:57:28 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/02 11:52:47 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdbool.h>
 #include <stdio.h>
 
-bool	parse(){
+int main(){
 	bool	a = true;
 	bool	b = false;
 

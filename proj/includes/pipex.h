@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:58:59 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/01 16:07:10 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/02 12:32:10 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,15 @@
 
 # include <stdlib.h>
 
-void	invalid_args(void);
+# define SUCCESS 0
+# define FAILURE 1
+
+typedef enum s_bool
+{
+	success,
+	failure
+}	t_bool;
+
+int	pipex(char *av, char *ev);
 
 #endif

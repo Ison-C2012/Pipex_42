@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 12:59:58 by keitotak          #+#    #+#             */
-/*   Updated: 2025/10/24 02:23:47 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/02 11:33:15 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,12 @@
 
 static char	**free_array(char **arr)
 {
+	char	**tmp;
+
+	tmp = arr;
 	while (*arr)
 		free(*arr++);
-	free(arr);
+	free(tmp);
 	return (NULL);
 }
 

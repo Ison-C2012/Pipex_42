@@ -11,8 +11,8 @@ OBJDIR := objs
 ARCDIR := libft
 
 SRCS	:= 	main.c \
-			exit.c \
-			pipex.c
+			pipex.c \
+			envp.c
 OBJS	:= $(SRCS:%.c=$(OBJDIR)/%.o)
 ARCS	:= libft.a
 
