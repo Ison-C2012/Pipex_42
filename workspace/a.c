@@ -1,23 +1,23 @@
 #include <unistd.h>
 #include <stdio.h>
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
-	int	fd[2];
 	pid_t	pid;
 
-	if (pipe(fd) == -1)
-	{
-		perror("pipe")
-		exit(EXIT_FAILURE);
-	}
 	pid = fork();
 	if (pid == -1)
 	{
-		perror("fork")
+		perror("fork");
 		exit(EXIT_FAILURE);
 	}
 	if (pid == 0)
-		child(fd);
+	{
+		if (execve("/bin/ls", "ls", envp) == -1)
+		{
+			perror("execve");
+			exit(EXIT_FAILURE);
+		}
+	}
 	waitpid();
 }
