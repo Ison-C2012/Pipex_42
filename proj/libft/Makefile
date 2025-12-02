@@ -65,14 +65,18 @@ CC		:= cc
 CFLAGS	:= -Wall -Wextra -Werror
 MKDIR	:= mkdir -p
 
+all: $(NAME)
+
+debug: CC=gcc
+debug: CFLAGS=-g3 -Wall -Wextra -Werror
+debug: $(NAME)
+
 $(NAME): $(OBJS)
 	$(AR) $(ARFLAGS) $@ $?
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(MKDIR) $(dir $@)
 	$(CC) $(CFLAGS) -I $(INCDIR) -c $< -o $@
-
-all: $(NAME)
 
 clean: 
 	rm -rf $(OBJDIR)

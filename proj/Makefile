@@ -1,5 +1,7 @@
 NAME := pipex
 
+RULE := all
+
 CC := cc
 CFLAGS := -Wall -Wextra -Werror
 IFLAGS := -Iincludes
@@ -14,15 +16,20 @@ SRCS	:= 	main.c \
 OBJS	:= $(SRCS:%.c=$(OBJDIR)/%.o)
 ARCS	:= libft.a
 
+all: $(NAME)
+
+debug: RULE=debug
+debug: CC=gcc
+debug: CFLAGS=-g3 -Wall -Wextra -Werror
+debug: $(NAME)
+
 $(NAME): $(OBJS)
-	@make -C $(ARCDIR)
+	@make -C $(ARCDIR) $(RULE)
 	$(CC) $(CFLAGS) $^ $(ARCDIR)/$(ARCS) $(IFLAGS) $(MLXFLAGS) -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< $(IFLAGS) -o $@
-
-all: $(NAME)
 
 clean:
 	@make -C $(ARCDIR) clean

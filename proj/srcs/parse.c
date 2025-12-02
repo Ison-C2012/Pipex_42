@@ -1,21 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: keitotak <keitotak@student.42tokyo.jp      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/01 14:56:57 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/02 10:51:15 by keitotak         ###   ########.fr       */
+/*   Created: 2025/12/01 17:40:07 by keitotak          #+#    #+#             */
+/*   Updated: 2025/12/01 17:57:28 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include <stdbool.h>
+#include <stdio.h>
 
-int	main(int argc, char *argv[])
-{
-	if (argc != 5)
-		invalid_args();
-	(void)argv;
-	return (0);
+bool	parse(){
+	bool	a = true;
+	bool	b = false;
+
+	printf("true:%d\n", a);
+	printf("true:%d\n", b);
+	return 0;
 }
