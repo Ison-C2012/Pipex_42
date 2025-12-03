@@ -59,6 +59,31 @@ The argument *flags* must include one of the following access modes:  O_RDONLY, 
 Success: new file descriptor / 
 Error: -1
 
+
+## close - close a file descriptor
+```c
+#include <unistd.h>
+
+int close(int fd);
+```
+#### Description
+close()  closes  a  file descriptor, so that it no longer refers to any file and may be
+reused.  Any record locks (see fcntl(2)) held on the file it was associated  with,  and
+owned  by  the process, are removed (regardless of the file descriptor that was used to
+obtain the lock).
+
+#### Return Value
+Success: 0 \ 
+Error: -1
+
+#### Errors
+**EBADF** : fd isn't a valid open file descriptor.
+
+**EINTR** : The close() call was interrupted by a signal; see signal(7).
+
+**EIO** : An I/O error occurred.
+
+
 ## pipe - create pipe
 ```c
 #include <unistd.h>
@@ -110,19 +135,6 @@ The mode specifies the accessibility check(s) to be performed, and is either the
 #### Return Value
 Success : 0 / 
 Error : -1
-
-
-
-
-## perror
-```c
-#include <stdio.h>
-
-void perror(const char *s);
-```
-#### Description
-
-#### Return Value
 
 
 

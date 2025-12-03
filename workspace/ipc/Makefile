@@ -4,7 +4,7 @@ SRCDIR:= src
 LIBDIR:= lib
 OBJDIR:= obj
 
-SRC:= main/ipc04.c envp.c get_pathname.c interpret_status.c
+SRC:= main/ipc05.c envp.c get_pathname.c interpret_status.c
 LIB:= libft.a
 OBJ:= $(SRC:%.c=$(OBJDIR)/%.o)
 
