@@ -91,27 +91,41 @@ Success : 0 /
 Error : -1
 
 
-## perror
+## pipe - create pipe
 ```c
-#include <stdio.h>
+#include <unistd.h>
 
-void perror(const char *s);
+int pipe(int pipefd[2]);
 ```
 #### Description
+pipe()  creates a pipe, a **unidirectional** data channel that can be used for interprocess communication.  The array *pipefd* is used to return two file  descriptors  referring  to the  ends of the pipe.  *pipefd[0]* refers to the read end of the pipe.  *pipefd[1]* refers to the write end of the pipe.  **Data written** to the write end of the pipe **is buffered** by the  kernel  **until  it is read** from the read end of the pipe.  For further details, see pipe(7).
 
 #### Return Value
+Success: 0 / 
+Error: -1
 
 
-## perror
+## dup, dup2 - duplicate a file descriptor
 ```c
-#include <stdio.h>
+#include <unistd.h>
 
-void perror(const char *s);
+int dup(int oldfd);
+int dup2(int oldfd, int newfd);
 ```
 #### Description
+The  dup()  system  call creates a copy of the file descriptor *oldfd*, using the lowest-numbered unused file descriptor for the new descriptor.
+
+The dup2() system call performs the same task as dup(), but instead of using  the  lowest-numbered  unused  file  descriptor, it uses the file descriptor number specified in *newfd*. If the file descriptor *newfd* was previously open, it is silently closed before being reused.
+
+Note the following points:
+
+*  If *oldfd* is not a valid file descriptor, then the  call  fails,  and  *newfd*  is  not closed.
+
+*  If  *oldfd*  is  a  valid file descriptor, and *newfd* has the same value as *oldfd*, then dup2() does nothing, and returns *newfd*.
 
 #### Return Value
-
+Success: new file descriptor \ 
+Error: -1
 
 
 ## perror
