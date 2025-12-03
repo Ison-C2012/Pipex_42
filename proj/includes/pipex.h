@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:58:59 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/02 12:32:10 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/03 21:33:02 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,19 @@
 
 typedef enum s_bool
 {
+	error = -1,
 	success,
 	failure
 }	t_bool;
+
+typedef struct s_pipex
+{
+	int		i_fd;
+	int		o_fd;
+	int		p_fd[2];
+	pid_t	pid1;
+	pid_t	pid2;
+}	t_pipex;
 
 int	pipex(char *av, char *ev);
 

@@ -24,43 +24,27 @@ pid_t	waitpid(pid_t pid, int *wstatus, int options);
 int		unlink(const char *pathname);
 ```
 
-## wait, waitpid
+
+## perror
 ```c
-#include <sys/types.h>
-#include <sys/wait.h>
+#include <stdio.h>
 
-pid_t wait(int *wstatus);
-pid_t waitpid(pid_t pid, int *wstatus, int options);
+void perror(const char *s);
 ```
-The call wait(&wstatus) is equivalent to:
-
-	int wstatus;
-	waitpid(-1, &wstatus, 0);
-
 #### Description
-The  waitpid()  system call suspends execution of the calling thread until a child specified by pid argument has changed state.  By default, waitpid() waits only  for  terminated  children.
-The value of pid can be:
+The  perror()  function  produces a message on standard error describing the last error
+encountered during a call to a system or library function.
 
-< -1 : wait for any child process whose process group ID is equal to the abs value of pid.
+First (if s is not NULL and \*s is not a null byte ('\0')), the  argument  string  *s*  is
+printed,  followed  by a colon and a blank.  Then an error message corresponding to the
+current value of *errno* and a new-line.
 
-= -1 : wait for any child process.
-
-= 0 : wait for any child process whose process group ID is equal to that of the calling process at the time of the call to waitpid();
-
-(waitpid() の呼び出し時点で呼び出し元プロセスのプロセスグループ ID と等しいプロセスグループ ID を持つ子プロセスを待機する。)
-
-\> 0 : wait for any child process whose process group ID is equal to the value of pid.
-
-If wstatus is not NULL, wait() and waitpid() store status information in the int to which it points.  This integer can be inspected with the several macros (which take the integer itself as an argument, not a pointer to it, as is done in wait() and waitpid()!):
-
-#### Return Vaue
-Success : the process ID of the child whose state has changed / 
-Error : -1
+#### Return Value
 
 
 ## open
 ```c
-#include <stdio.h>
+#include <fcntl.h>
 
 int open(const char *pathname, int flags);
 int open(const char *pathname, int flags, mode_t mode);
@@ -74,22 +58,6 @@ The argument *flags* must include one of the following access modes:  O_RDONLY, 
 #### Return Value
 Success: new file descriptor / 
 Error: -1
-
-## access
-```c
-#include <unistd.h>
-
-int access(const char *pathname, int mode);
-```
-#### Description
-access() checks whether the calling process can access the file pathname. If pathname is a symbolic link, it is dereferenced.
-
-The mode specifies the accessibility check(s) to be performed, and is either the value F_OK, or  a  mask consisting of the bitwise OR of one or more of R_OK, W_OK, and X_OK. F_OK tests for the existence of the file.  R_OK, W_OK, and X_OK test whether the file exists and grants read, write, and execute permissions, respectively.
-
-#### Return Value
-Success : 0 / 
-Error : -1
-
 
 ## pipe - create pipe
 ```c
@@ -128,6 +96,24 @@ Success: new file descriptor \
 Error: -1
 
 
+## access
+```c
+#include <unistd.h>
+
+int access(const char *pathname, int mode);
+```
+#### Description
+access() checks whether the calling process can access the file pathname. If pathname is a symbolic link, it is dereferenced.
+
+The mode specifies the accessibility check(s) to be performed, and is either the value F_OK, or  a  mask consisting of the bitwise OR of one or more of R_OK, W_OK, and X_OK. F_OK tests for the existence of the file.  R_OK, W_OK, and X_OK test whether the file exists and grants read, write, and execute permissions, respectively.
+
+#### Return Value
+Success : 0 / 
+Error : -1
+
+
+
+
 ## perror
 ```c
 #include <stdio.h>
@@ -140,7 +126,6 @@ void perror(const char *s);
 
 
 
-
 ## perror
 ```c
 #include <stdio.h>
@@ -152,15 +137,64 @@ void perror(const char *s);
 #### Return Value
 
 
-
-## perror
+## wait, waitpid
 ```c
-#include <stdio.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
-void perror(const char *s);
+pid_t wait(int *wstatus);
+pid_t waitpid(pid_t pid, int *wstatus, int options);
 ```
-#### Description
+The call wait(&wstatus) is equivalent to:
 
-#### Return Value
+	int wstatus;
+	waitpid(-1, &wstatus, 0);
+
+#### Description
+The  waitpid()  system call suspends execution of the calling thread until a child specified by pid argument has changed state.  By default, waitpid() waits only  for  terminated  children.
+The value of pid can be:
+
+< -1 : wait for any child process whose process group ID is equal to the abs value of pid.
+
+= -1 : wait for any child process.
+
+= 0 : wait for any child process whose process group ID is equal to that of the calling process at the time of the call to waitpid();
+
+(waitpid() の呼び出し時点で呼び出し元プロセスのプロセスグループ ID と等しいプロセスグループ ID を持つ子プロセスを待機する。)
+
+\> 0 : wait for any child process whose process group ID is equal to the value of pid.
+
+If wstatus is not NULL, wait() and waitpid() store status information in the int to which it points.  This integer can be inspected with the several macros (which take the integer itself as an argument, not a pointer to it, as is done in wait() and waitpid()!):
+
+`WIFEXITED(wstatus)`
+returns  true  if  the child terminated normally, that is, by calling exit(3) or \_exit(2), or by returning from main().
+
+`WEXITSTATUS(wstatus)`
+returns the exit status of the child.  This consists of the least significant  8
+bits  of  the  status  argument that the child specified in a call to exit(3) or
+\_exit(2) or as the argument for a return statement in main().  This macro should
+be employed only if WIFEXITED returned true.
+
+`WIFSIGNALED(wstatus)`
+returns true if the child process was terminated by a signal.
+
+`WTERMSIG(wstatus)` 
+returns  the  number  of  the signal that caused the child process to terminate. This macro should be employed only if WIFSIGNALED returned true.
+
+`WCOREDUMP(wstatus)`
+returns true if the child produced a core dump (see core(5)).  This macro should be employed only if WIFSIGNALED returned true. This  macro  is  not specified in POSIX.1-2001 and is not available on some UNIX implementations (e.g., AIX, SunOS).  Therefore, enclose its  use  inside  #ifdef WCOREDUMP ... #endif.
+
+`WIFSTOPPED(wstatus)`
+returns  true  if the child process was stopped by delivery of a signal; this is possible only if the call was done using WUNTRACED or when the  child  is  being traced (see ptrace(2)).
+
+`WSTOPSIG(wstatus)`
+returns  the  number  of  the signal which caused the child to stop.  This macro should be employed only if WIFSTOPPED returned true.
+
+`WIFCONTINUED(wstatus)`
+(since Linux 2.6.10) returns true if the child process was resumed  by  delivery of SIGCONT.
+
+#### Return Vaue
+Success : the process ID of the child whose state has changed / 
+Error : -1
 
 

@@ -1,62 +1,48 @@
 #include "ipc.h"
 
-char	*get_pathname(char *name, char **ev)
+void	child(char *file, char **cmd, char **ev, int pipefd[])
 {
-	char	**paths;
-	char	*path;
+	int		fd;
 	char	*pathname;
-	char	**paths_to_free;
 
-	paths = get_paths_from_envp(ev);
-	if (paths == NULL)
-		return (NULL);
-	paths_to_free = paths;
-	while (*paths != NULL)
+	fd = open(file, O_RDONLY);
+	if (fd == -1)
 	{
-		path = ft_strjoin(*paths, "/");
-		if (path == NULL)
-			return (NULL);
-		pathname = ft_strjoin(path, name);
-		if (pathname == NULL)
-			return (NULL);
-		free(path);
-		if (access(pathname, X_OK) == 0)
-			break ;
-		free(pathname);
-		paths++;
+		perror("open");
+		exit(EXIT_FAILURE);
 	}
-	if (paths == NULL)
-		pathname = NULL;
-	free_arrs(paths_to_free);
-	return (pathname);
-}
-
-#define STDOUT 1
-
-void	child(char **av, char **ev, int pipefd[])
-{
-	char	*pathname;
-
+	if (dup2(fd, STDIN) == -1)
+	{
+		perror("dup2");
+		close(fd);
+		exit(EXIT_FAILURE);
+	}
 	close(pipefd[0]);
 	if (dup2(pipefd[1], STDOUT) == -1)
 	{
 		perror("dup2");
+		close(fd);
 		close(pipefd[1]);
 		exit(EXIT_FAILURE);
 	}
-	pathname = get_pathname(av[0], ev);
+	pathname = get_pathname(cmd[0], ev);
 	if (pathname == NULL)
 	{
 		perror("get_pathname");
+		close(fd);
+		close(pipefd[1]);
 		exit(EXIT_FAILURE);
 	}
-	if (execve(pathname, av, ev) == -1)
+	if (execve(pathname, cmd, ev) == -1)
 	{
 		perror("execve");
+		close(fd);
+		close(pipefd[1]);
 		exit(EXIT_FAILURE);
 	}
 	free(pathname);
-	exit(EXIT_SUCCESS);
+	close(fd);
+	exit(EXIT_FAILURE);
 }
 
 void	parent(pid_t pid, int pipefd[])
@@ -66,7 +52,12 @@ void	parent(pid_t pid, int pipefd[])
 	int		rd;
 
 	close(pipefd[1]);
-	waitpid(pid, &wstatus, 0);
+	if (waitpid(pid, &wstatus, 0) == -1)
+	{
+		perror("waitpid");
+		close(pipefd[0]);
+		exit(EXIT_FAILURE);
+	}
 	rd = 1;
 	while (rd == 1)
 	{
@@ -84,15 +75,19 @@ void	parent(pid_t pid, int pipefd[])
 			exit(EXIT_FAILURE);
 		}
 	}
+	close(pipefd[0]);
 	printf("\nconnection success\n");
 }
+
+//$ ./ipc file cmd ..
+//$ cmd .. file
 
 int	main(int argc, char **argv, char **envp)
 {
 	int		pipefd[2];
 	pid_t	pid;
 
-	if (argc < 2)
+	if (argc < 3)
 		return (failure);
 	if (pipe(pipefd) == -1)
 	{
@@ -108,8 +103,8 @@ int	main(int argc, char **argv, char **envp)
 		exit(EXIT_FAILURE);
 	}
 	if (pid == 0)
-		child(&argv[1], envp, pipefd);
+		child(argv[1], &argv[2], envp, pipefd);
 	else
 		parent(pid, pipefd);
-	return success;
+	return (success);
 }

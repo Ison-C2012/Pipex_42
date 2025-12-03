@@ -4,7 +4,7 @@ SRCDIR:= src
 LIBDIR:= lib
 OBJDIR:= obj
 
-SRC:= envp.c ipc02.c
+SRC:= main/ipc04.c envp.c get_pathname.c interpret_status.c
 LIB:= libft.a
 OBJ:= $(SRC:%.c=$(OBJDIR)/%.o)
 
@@ -15,7 +15,7 @@ $(NAME): $(OBJ)
 	$(CC) $^ $(LIBDIR)/$(LIB) -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
-	@mkdir -p $(dir @)
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< $(IFLAGS) -o $@
 
 all: $(NAME)
