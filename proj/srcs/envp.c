@@ -6,29 +6,13 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 10:54:12 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/02 11:37:59 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/03 23:08:23 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 #define PATH "PATH="
-
-void	print_arrs(char **arrs)
-{
-	while (*arrs)
-		ft_printf("%s\n", *arrs++);
-}
-
-void	free_arrs(char **arrs)
-{
-	char	**tmp;
-
-	tmp = arrs;
-	while (*arrs)
-		free(*arrs++);
-	free(tmp);
-}
 
 char	**get_paths_from_envp(char **ev)
 {

@@ -6,19 +6,11 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 12:07:47 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/03 21:36:17 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/04 00:57:09 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-void	close_fds(t_pipex *p)
-{
-	close(p.i_fd);
-	close(p.o_fd);
-	close(p.p_fd[0]);
-	close(p.p_fd[1]);
-}
 
 int	open_iofile(t_pipex *p, char *infile, char *outfile)
 {
@@ -26,16 +18,24 @@ int	open_iofile(t_pipex *p, char *infile, char *outfile)
 	if (p->i_fd == error)
 	{
 		perror(infile);
-		exit(EXIT_FAILURE);
+		exit(failure);
 	}
-	p->i_fd = open(outfile, O_WRONLY);
+	p->o_fd = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (p->o_fd == error)
 	{
 		close(p->i_fd);
 		perror(outfile);
-		exit(EXIT_FAILURE);
+		exit(failure);
 	}
 	return (success);
+}
+
+void	close_fds(t_pipex *p)
+{
+	close(p->i_fd);
+	close(p->o_fd);
+	close(p->p_fd[0]);
+	close(p->p_fd[1]);
 }
 
 //av[0]:infile
@@ -48,20 +48,15 @@ int	pipex(char **av, char **ev)
 	t_pipex	p;
 
 	open_iofile(&p, av[0], av[3]);
-
-	if (pipe(p.p_fd) == -1)
+	if (pipe(p.p_fd) == error)
 	{
-		close_fds(p);
-		return (failure);
+		perror("pipe");
+		close(p.i_fd);
+		close(p.o_fd);
+		exit(failure);
 	}
-	p.pid = fork();
-	if (p.pid == -1)
-	{
-		close_fds(p);
-		return (failure);
-	}
-	if (p.pid == 0)
-	{
-
-	}
+	process1(&p, av[1], ev);
+	process2(&p, av[2], ev);
+	close_fds(&p);
+	return (success);
 }

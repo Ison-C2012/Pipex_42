@@ -12,7 +12,10 @@ ARCDIR := libft
 
 SRCS	:= 	main.c \
 			pipex.c \
-			envp.c
+			process1.c \
+			process2.c \
+			exec.c \
+			helper.c
 OBJS	:= $(SRCS:%.c=$(OBJDIR)/%.o)
 ARCS	:= libft.a
 
