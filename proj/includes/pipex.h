@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:58:59 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/04 00:48:29 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/04 09:47:32 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ typedef struct s_path
 
 typedef struct s_pipex
 {
+	char	*infile;
+	char	*outfile;
 	int		i_fd;
 	int		o_fd;
 	int		p_fd[2];
@@ -57,7 +59,6 @@ typedef struct s_pipex
 
 // pipex.c
 int		pipex(char **av, char **ev);
-void	close_fds(t_pipex *p);
 
 // process1.c
 int		process1(t_pipex *p, char *cmd1, char **ev);
@@ -68,9 +69,13 @@ int		process2(t_pipex *p, char *cmd2, char **ev);
 // exec.c
 int		exec_cmd(t_pipex *p, char *cmd, char **ev);
 
+// cmdset.c
+
+// wait.c
+void	wait_for_child(t_pipex *p, int pid);
+
 // helper.c
-int		status_code(int status);
-void	free_arrs(char **arrs);
+void	close_fds(t_pipex *p);
 void	print_arrs(char **arrs);
 
 #endif

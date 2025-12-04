@@ -15,6 +15,7 @@ SRCS	:= 	main.c \
 			process1.c \
 			process2.c \
 			exec.c \
+			wait.c \
 			helper.c
 OBJS	:= $(SRCS:%.c=$(OBJDIR)/%.o)
 ARCS	:= libft.a

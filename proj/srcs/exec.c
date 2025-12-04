@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 23:11:26 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/04 01:15:09 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/04 09:56:11 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #define PATH "PATH="
 
-char	**get_paths_from_envp(char **ev)
+static char	**get_paths_from_envp(char **ev)
 {
 	char	**paths;
 
@@ -30,14 +30,24 @@ char	**get_paths_from_envp(char **ev)
 	return (NULL);
 }
 
-char	*free_path(char *path, char **paths)
+static void	free_arrs(char **arrs)
+{
+	char	**tmp;
+
+	tmp = arrs;
+	while (*arrs)
+		free(*arrs++);
+	free(tmp);
+}
+
+static char	*free_path(char *path, char **paths)
 {
 	free(path);
 	free_arrs(paths);
 	return (NULL);
 }
 
-char	*get_pathname(char *name, char **ev)
+static char	*get_pathname(char *name, char **ev)
 {
 	t_path	pt;
 
@@ -70,7 +80,6 @@ int	exec_cmd(t_pipex *p, char *cmd, char **ev)
 	char	**cmdset;
 	char	*pathname;
 
-//	cmdset = get_cmdset(cmd);
 	cmdset = ft_split(cmd, ' ');
 	if (cmdset == NULL)
 	{

@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 00:26:59 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/04 01:05:52 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/04 10:10:46 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,14 @@
 
 void	child2(t_pipex *p, char *cmd2, char **ev)
 {
-	close(p->i_fd);
 	close(p->p_fd[1]);
+	p->o_fd = open(p->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (p->o_fd == error)
+	{
+		perror(p->outfile);
+		close(p->p_fd[0]);
+		exit(failure);
+	}
 	if (dup2(p->p_fd[0], STDIN) == error)
 	{
 		perror("dup2");
@@ -33,24 +39,6 @@ void	child2(t_pipex *p, char *cmd2, char **ev)
 	exec_cmd(p, cmd2, ev);
 }
 
-void	parent2(t_pipex *p)
-{
-	int	wstatus;
-
-	close(p->p_fd[0]);
-	if (waitpid(p->pid2, &wstatus, 0) == -1)
-	{
-		perror("waitpid");
-		close_fds(p);
-		exit(failure);
-	}
-	if (status_code(wstatus) != success)
-	{
-		close_fds(p);
-		exit(failure);
-	}
-}
-
 int	process2(t_pipex *p, char *cmd2, char **ev)
 {
 	p->pid2 = fork();
@@ -63,6 +51,6 @@ int	process2(t_pipex *p, char *cmd2, char **ev)
 	if (p->pid2 == 0)
 		child2(p, cmd2, ev);
 	else
-		parent2(p);
+		wait_for_child(p, p->pid2);
 	return (success);
 }

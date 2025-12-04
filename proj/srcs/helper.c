@@ -6,37 +6,18 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 23:03:55 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/04 00:37:59 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/04 09:55:57 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	status_code(int status)
+void	close_fds(t_pipex *p)
 {
-	int	code;
-
-	if (WIFEXITED(status) == true)
-		code = WEXITSTATUS(status);
-	if (WIFSIGNALED(status) == true)
-		code = WTERMSIG(status);
-	if (WIFSIGNALED(status) == true)
-	{
-		code = WTERMSIG(status);
-		if (WCOREDUMP(status) == true)
-			return (-1);
-	}
-	return (code);
-}
-
-void	free_arrs(char **arrs)
-{
-	char	**tmp;
-
-	tmp = arrs;
-	while (*arrs)
-		free(*arrs++);
-	free(tmp);
+	close(p->i_fd);
+	close(p->o_fd);
+	close(p->p_fd[0]);
+	close(p->p_fd[1]);
 }
 
 void	print_arrs(char **arrs)
@@ -44,4 +25,3 @@ void	print_arrs(char **arrs)
 	while (*arrs)
 		ft_printf("%s\n", *arrs++);
 }
-

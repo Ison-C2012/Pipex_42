@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 23:52:44 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/04 00:02:16 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/04 09:44:01 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,4 @@
 
 char	**get_cmdset(char *cmd)
 {
-	char	**cmdset;
-
 }

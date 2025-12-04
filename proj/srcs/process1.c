@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 22:26:17 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/04 01:13:56 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/04 10:10:39 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,14 @@
 
 void	child1(t_pipex *p, char *cmd1, char **ev)
 {
-	close(p->o_fd);
 	close(p->p_fd[0]);
+	p->i_fd = open(p->infile, O_RDONLY);
+	if (p->i_fd == error)
+	{
+		perror(p->infile);
+		close(p->p_fd[1]);
+		exit(failure);
+	}
 	if (dup2(p->i_fd, STDIN) == error)
 	{
 		perror("dup2");
@@ -33,24 +39,6 @@ void	child1(t_pipex *p, char *cmd1, char **ev)
 	exec_cmd(p, cmd1, ev);
 }
 
-void	parent1(t_pipex *p)
-{
-	int	wstatus;
-
-	close(p->p_fd[1]);
-	if (waitpid(p->pid1, &wstatus, 0) == -1)
-	{
-		perror("waitpid");
-		close_fds(p);
-		exit(failure);
-	}
-	if (status_code(wstatus) != success)
-	{
-		close_fds(p);
-		exit(failure);
-	}
-}
-
 int	process1(t_pipex *p, char *cmd1, char **ev)
 {
 	p->pid1 = fork();
@@ -63,6 +51,6 @@ int	process1(t_pipex *p, char *cmd1, char **ev)
 	if (p->pid1 == 0)
 		child1(p, cmd1, ev);
 	else
-		parent1(p);
+		wait_for_child(p, p->pid1);
 	return (success);
 }
