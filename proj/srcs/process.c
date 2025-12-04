@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 22:26:17 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/04 01:13:56 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/04 20:44:34 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,36 +33,44 @@ void	child1(t_pipex *p, char *cmd1, char **ev)
 	exec_cmd(p, cmd1, ev);
 }
 
-void	parent1(t_pipex *p)
+void	child2(t_pipex *p, char *cmd2, char **ev)
 {
-	int	wstatus;
-
+	close(p->i_fd);
 	close(p->p_fd[1]);
-	if (waitpid(p->pid1, &wstatus, 0) == -1)
+	if (dup2(p->p_fd[0], STDIN) < 0)
 	{
-		perror("waitpid");
-		close_fds(p);
+		perror("dup2");
+		close(p->o_fd);
+		close(p->p_fd[0]);
 		exit(failure);
 	}
-	if (status_code(wstatus) != success)
+	if (dup2(p->o_fd, STDOUT) < 0)
 	{
-		close_fds(p);
+		perror("dup2");
+		close(p->o_fd);
+		close(p->p_fd[0]);
 		exit(failure);
 	}
+	exec_cmd(p, cmd2, ev);
 }
 
-int	process1(t_pipex *p, char *cmd1, char **ev)
+int	process(t_pipex *p, char **ev, int p_nbr)
 {
-	p->pid1 = fork();
-	if (p->pid1 < 0)
+	pid_t	pid;
+
+	pid = fork();
+	if (pid < 0)
 	{
 		perror("fork");
 		close_fds(p);
 		exit(failure);
 	}
-	if (p->pid1 == 0)
-		child1(p, cmd1, ev);
-	else
-		parent1(p);
-	return (success);
+	if (pid == 0)
+	{
+		if (p_nbr == 1)
+			child1(p, p->cmd1, ev);
+		if (p_nbr == 2)
+			child2(p, p->cmd2, ev);
+	}
+	return (pid);
 }

@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 23:11:26 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/04 01:15:09 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/04 21:09:02 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,16 @@ char	**get_paths_from_envp(char **ev)
 		ev++;
 	}
 	return (NULL);
+}
+
+void	free_arrs(char **arrs)
+{
+	char	**tmp;
+
+	tmp = arrs;
+	while (*arrs)
+		free(*arrs++);
+	free(tmp);
 }
 
 char	*free_path(char *path, char **paths)
@@ -85,7 +95,10 @@ int	exec_cmd(t_pipex *p, char *cmd, char **ev)
 	}
 	if (execve(pathname, cmdset, ev) == -1)
 	{
-		perror("execve");
+		ft_putstr_fd("Command not found: ", 2);
+		ft_putendl_fd(cmdset[0], 2);
+		free_arrs(cmdset);
+//		free(pathname);
 		close_fds(p);
 		exit(failure);
 	}

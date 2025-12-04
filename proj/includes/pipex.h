@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:58:59 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/04 00:48:29 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/04 21:15:32 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,14 @@ typedef struct s_path
 
 typedef struct s_pipex
 {
+	char	*infile;
+	char	*cmd1;
+	char	*cmd2;
+	char	*outfile;
 	int		i_fd;
 	int		o_fd;
 	int		p_fd[2];
+	int		cpnbr;
 	pid_t	pid1;
 	pid_t	pid2;
 }	t_pipex;
@@ -59,18 +64,18 @@ typedef struct s_pipex
 int		pipex(char **av, char **ev);
 void	close_fds(t_pipex *p);
 
-// process1.c
-int		process1(t_pipex *p, char *cmd1, char **ev);
+// process.c
+int		process(t_pipex *p, char **ev, int p_nbr);
 
+/* process1.c
+int		process1(t_pipex *p, char *cmd1, char **ev);
 // process2.c
-int		process2(t_pipex *p, char *cmd2, char **ev);
+int		process2(t_pipex *p, char *cmd2, char **ev);*/
 
 // exec.c
 int		exec_cmd(t_pipex *p, char *cmd, char **ev);
 
-// helper.c
-int		status_code(int status);
-void	free_arrs(char **arrs);
-void	print_arrs(char **arrs);
+//wait.c
+int		wait_for_children(t_pipex *p);
 
 #endif

@@ -2,7 +2,7 @@ NAME := pipex
 
 RULE := all
 
-CC := cc
+CC := clang
 CFLAGS := -Wall -Wextra -Werror
 IFLAGS := -Iincludes
 
@@ -12,10 +12,9 @@ ARCDIR := libft
 
 SRCS	:= 	main.c \
 			pipex.c \
-			process1.c \
-			process2.c \
+			process.c \
 			exec.c \
-			helper.c
+			wait.c
 OBJS	:= $(SRCS:%.c=$(OBJDIR)/%.o)
 ARCS	:= libft.a
 
@@ -25,6 +24,11 @@ debug: RULE=debug
 debug: CC=gcc
 debug: CFLAGS=-g3 -Wall -Wextra -Werror
 debug: $(NAME)
+
+memory: RULE=memory
+memory: CC=gcc -O0
+memory: CFLAGS=-Wall -Wextra -Werror -fsanitize=address
+memory: $(NAME)
 
 $(NAME): $(OBJS)
 	@make -C $(ARCDIR) $(RULE)
