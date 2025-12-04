@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process1.c                                         :+:      :+:    :+:   */
+/*   process.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 22:26:17 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/04 20:44:34 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/04 21:33:53 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,13 @@
 
 void	child1(t_pipex *p, char *cmd1, char **ev)
 {
-	close(p->o_fd);
+//	close(p->o_fd);
+	p->i_fd = open(p->infile, O_RDONLY);
+	if (p->i_fd == error)
+	{
+		perror(p->infile);
+		exit(failure);
+	}
 	close(p->p_fd[0]);
 	if (dup2(p->i_fd, STDIN) == error)
 	{
@@ -35,7 +41,13 @@ void	child1(t_pipex *p, char *cmd1, char **ev)
 
 void	child2(t_pipex *p, char *cmd2, char **ev)
 {
-	close(p->i_fd);
+//	close(p->i_fd);
+	p->o_fd = open(p->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (p->o_fd == error)
+	{
+		perror(p->outfile);
+		exit(failure);
+	}
 	close(p->p_fd[1]);
 	if (dup2(p->p_fd[0], STDIN) < 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 12:07:47 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/04 21:19:50 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/04 21:27:19 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	init_pipex(t_pipex *p, char **av)
 	p->cmd1 = av[1];
 	p->cmd2 = av[2];
 	p->outfile = av[3];
-	open_iofile(p, av[0], av[3]);
+//	open_iofile(p, av[0], av[3]);
 }
 
 int	pipex(char **av, char **ev)
