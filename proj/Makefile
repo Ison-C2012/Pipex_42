@@ -2,7 +2,7 @@ NAME := pipex
 
 RULE := all
 
-CC := clang
+CC := cc
 CFLAGS := -Wall -Wextra -Werror
 IFLAGS := -Iincludes
 

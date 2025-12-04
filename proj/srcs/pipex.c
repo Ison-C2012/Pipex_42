@@ -6,28 +6,24 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 12:07:47 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/04 21:27:19 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/04 21:51:14 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	open_iofile(t_pipex *p, char *infile, char *outfile)
+static void	init_pipex(t_pipex *p, char **av)
 {
-	p->i_fd = open(infile, O_RDONLY);
-	if (p->i_fd == error)
-	{
-		perror(infile);
-		return (failure);
-	}
-	p->o_fd = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (p->o_fd == error)
-	{
-		close(p->i_fd);
-		perror(outfile);
-		return (failure);
-	}
-	return (success);
+	p->infile = av[0];
+	p->cmd1 = av[1];
+	p->cmd2 = av[2];
+	p->outfile = av[3];
+	p->i_fd = -1;
+	p->o_fd = -1;
+	p->p_fd[0] = -1;
+	p->p_fd[1] = -1;
+	p->pid1 = -1;
+	p->pid2 = -1;
 }
 
 void	close_fds(t_pipex *p)
@@ -36,15 +32,6 @@ void	close_fds(t_pipex *p)
 	close(p->o_fd);
 	close(p->p_fd[0]);
 	close(p->p_fd[1]);
-}
-
-void	init_pipex(t_pipex *p, char **av)
-{
-	p->infile = av[0];
-	p->cmd1 = av[1];
-	p->cmd2 = av[2];
-	p->outfile = av[3];
-//	open_iofile(p, av[0], av[3]);
 }
 
 int	pipex(char **av, char **ev)
@@ -61,7 +48,8 @@ int	pipex(char **av, char **ev)
 	}
 	p.pid1 = process(&p, ev, 1);
 	p.pid2 = process(&p, ev, 2);
-	close_fds(&p);
+	close(p.p_fd[0]);
+	close(p.p_fd[1]);
 	if (wait_for_children(&p) == failure)
 		return (failure);
 	return (success);

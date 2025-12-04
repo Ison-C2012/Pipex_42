@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:58:59 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/04 21:15:32 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/04 21:49:14 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ typedef struct s_pipex
 	int		i_fd;
 	int		o_fd;
 	int		p_fd[2];
-	int		cpnbr;
 	pid_t	pid1;
 	pid_t	pid2;
 }	t_pipex;

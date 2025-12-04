@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 20:34:18 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/04 21:18:04 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/04 22:02:31 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	wait_for_child(t_pipex *p, pid_t pid)
 
 	if (waitpid(pid, &wstatus, 0) == -1)
 	{
-		perror("waitpid");
 		close_fds(p);
 		return (failure);
 	}

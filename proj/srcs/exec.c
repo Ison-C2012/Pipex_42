@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 23:11:26 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/04 21:35:44 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/04 22:02:12 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,13 +90,14 @@ int	exec_cmd(t_pipex *p, char *cmd, char **ev)
 	pathname = get_pathname(cmdset[0], ev);
 	if (pathname == NULL)
 	{
+		free_arrs(cmdset);
 		close_fds(p);
 		exit(failure);
 	}
 	if (execve(pathname, cmdset, ev) == -1)
 	{
-		ft_putstr_fd("command not found: ", 2);
-		ft_putendl_fd(cmdset[0], 2);
+		ft_putstr_fd(cmdset[0], 2);
+		ft_putendl_fd(": command not found", 2);
 		free_arrs(cmdset);
 //		free(pathname);
 		close_fds(p);

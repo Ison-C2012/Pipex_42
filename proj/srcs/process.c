@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 22:26:17 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/04 21:33:53 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/04 21:58:14 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,13 @@
 
 void	child1(t_pipex *p, char *cmd1, char **ev)
 {
-//	close(p->o_fd);
+	close(p->p_fd[0]);
 	p->i_fd = open(p->infile, O_RDONLY);
 	if (p->i_fd == error)
 	{
 		perror(p->infile);
 		exit(failure);
 	}
-	close(p->p_fd[0]);
 	if (dup2(p->i_fd, STDIN) == error)
 	{
 		perror("dup2");
@@ -41,14 +40,13 @@ void	child1(t_pipex *p, char *cmd1, char **ev)
 
 void	child2(t_pipex *p, char *cmd2, char **ev)
 {
-//	close(p->i_fd);
+	close(p->p_fd[1]);
 	p->o_fd = open(p->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (p->o_fd == error)
 	{
 		perror(p->outfile);
 		exit(failure);
 	}
-	close(p->p_fd[1]);
 	if (dup2(p->p_fd[0], STDIN) < 0)
 	{
 		perror("dup2");
@@ -74,7 +72,8 @@ int	process(t_pipex *p, char **ev, int p_nbr)
 	if (pid < 0)
 	{
 		perror("fork");
-		close_fds(p);
+		close(p->p_fd[0]);
+		close(p->p_fd[1]);
 		exit(failure);
 	}
 	if (pid == 0)
