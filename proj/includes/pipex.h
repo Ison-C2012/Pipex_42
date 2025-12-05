@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:58:59 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/05 18:35:08 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/05 20:56:38 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,13 @@ int		fork_process(t_pipex *p, char **ev, int p_nbr);
 
 // exec.c
 int		exec_command(char *cmd, char **ev);
+char	*free_arrs_ret_s(char **arrs, char *s);
 
 //wait.c
 int		wait_for_children(t_pipex *p);
 
 //helper.c
 bool	include_quote(char *str);
-void	err_message(char *name, char *text);
+void	handle_noexist_cmd(char **cmdset);
 
 #endif

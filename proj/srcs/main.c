@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:56:57 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/05 19:53:04 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/05 20:32:13 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,5 @@ int	main(int argc, char **argv, char **envp)
 		ft_putendl_fd(" \"sed s/stdio/unistd/g\" file2\e[0m", 2);
 		return (EXIT_FAILURE);
 	}
-	if (pipex(&argv[1], envp) != success)
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
+	return (pipex(&argv[1], envp));
 }

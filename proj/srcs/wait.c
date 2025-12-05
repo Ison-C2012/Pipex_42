@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 20:34:18 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/05 11:47:02 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/05 20:40:14 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,35 +19,25 @@ static int	status_code(int status)
 	if (WIFEXITED(status))
 		code = WEXITSTATUS(status);
 	if (WIFSIGNALED(status))
-		code = WTERMSIG(status);
-	if (WIFSIGNALED(status))
-	{
-		code = WTERMSIG(status);
-		if (WCOREDUMP(status))
-			return (-1);
-	}
+		code = WTERMSIG(status) + 128;
 	return (code);
-}
-
-static int	wait_for_child(pid_t pid)
-{
-	int	wstatus;
-
-	if (waitpid(pid, &wstatus, 0) == error)
-		return (failure);
-	if (status_code(wstatus) != success)
-		return (failure);
-	return (success);
 }
 
 int	wait_for_children(t_pipex *p)
 {
-	int	res1;
-	int	res2;
+	int	code;
+	int	wstatus;
 
-	res1 = wait_for_child(p->pid1);
-	res2 = wait_for_child(p->pid2);
-	if (res1 != success || res2 != success)
+	if (waitpid(p->pid1, NULL, 0) == error)
+	{
+		perror("waitpid");
 		return (failure);
-	return (success);
+	}
+	if (waitpid(p->pid2, &wstatus, 0) == error)
+	{
+		perror("waitpid");
+		return (failure);
+	}
+	code = status_code(wstatus);
+	return (code);
 }
