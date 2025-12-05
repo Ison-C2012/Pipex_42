@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 23:11:26 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/05 15:29:03 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/05 15:55:30 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ int	exec_command(char *cmd, char **ev)
 	char	*pathname;
 
 	cmdset = ft_split(cmd, ' ');
-//	cmdset = get_cmdset(cmd);
 	if (cmdset == NULL)
 		return (failure);
 	pathname = get_pathname(cmdset[0], ev);
