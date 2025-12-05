@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 12:07:47 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/04 21:51:14 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/05 11:56:50 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,6 @@ static void	init_pipex(t_pipex *p, char **av)
 	p->pid2 = -1;
 }
 
-void	close_fds(t_pipex *p)
-{
-	close(p->i_fd);
-	close(p->o_fd);
-	close(p->p_fd[0]);
-	close(p->p_fd[1]);
-}
-
 int	pipex(char **av, char **ev)
 {
 	t_pipex	p;
@@ -44,13 +36,13 @@ int	pipex(char **av, char **ev)
 		perror("pipe");
 		close(p.i_fd);
 		close(p.o_fd);
-		return (failure);
+		return (EXIT_FAILURE);
 	}
-	p.pid1 = process(&p, ev, 1);
-	p.pid2 = process(&p, ev, 2);
+	p.pid1 = fork_process(&p, ev, 1);
+	p.pid2 = fork_process(&p, ev, 2);
 	close(p.p_fd[0]);
 	close(p.p_fd[1]);
-	if (wait_for_children(&p) == failure)
-		return (failure);
-	return (success);
+	if (wait_for_children(&p) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:58:59 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/04 21:49:14 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/05 11:54:58 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,21 +60,15 @@ typedef struct s_pipex
 }	t_pipex;
 
 // pipex.c
-int		pipex(char **av, char **ev);
-void	close_fds(t_pipex *p);
+int	pipex(char **av, char **ev);
 
 // process.c
-int		process(t_pipex *p, char **ev, int p_nbr);
-
-/* process1.c
-int		process1(t_pipex *p, char *cmd1, char **ev);
-// process2.c
-int		process2(t_pipex *p, char *cmd2, char **ev);*/
+int	fork_process(t_pipex *p, char **ev, int p_nbr);
 
 // exec.c
-int		exec_cmd(t_pipex *p, char *cmd, char **ev);
+int	exec_command(char *cmd, char **ev);
 
 //wait.c
-int		wait_for_children(t_pipex *p);
+int	wait_for_children(t_pipex *p);
 
 #endif

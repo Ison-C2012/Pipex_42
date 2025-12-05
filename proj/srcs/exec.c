@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 23:11:26 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/04 22:02:12 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/05 11:55:39 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #define PATH "PATH="
 
-char	**get_paths_from_envp(char **ev)
+static char	**get_paths_from_envp(char **ev)
 {
 	char	**paths;
 
@@ -30,7 +30,7 @@ char	**get_paths_from_envp(char **ev)
 	return (NULL);
 }
 
-void	free_arrs(char **arrs)
+static void	free_arrs(char **arrs)
 {
 	char	**tmp;
 
@@ -40,14 +40,14 @@ void	free_arrs(char **arrs)
 	free(tmp);
 }
 
-char	*free_path(char *path, char **paths)
+static char	*free_path(char *path, char **paths)
 {
 	free(path);
 	free_arrs(paths);
 	return (NULL);
 }
 
-char	*get_pathname(char *name, char **ev)
+static char	*get_pathname(char *name, char **ev)
 {
 	t_path	pt;
 
@@ -75,7 +75,7 @@ char	*get_pathname(char *name, char **ev)
 	return (pt.pathname);
 }
 
-int	exec_cmd(t_pipex *p, char *cmd, char **ev)
+int	exec_command(char *cmd, char **ev)
 {
 	char	**cmdset;
 	char	*pathname;
@@ -83,16 +83,12 @@ int	exec_cmd(t_pipex *p, char *cmd, char **ev)
 //	cmdset = get_cmdset(cmd);
 	cmdset = ft_split(cmd, ' ');
 	if (cmdset == NULL)
-	{
-		close_fds(p);
-		exit(failure);
-	}
+		return (failure);
 	pathname = get_pathname(cmdset[0], ev);
 	if (pathname == NULL)
 	{
 		free_arrs(cmdset);
-		close_fds(p);
-		exit(failure);
+		return (failure);
 	}
 	if (execve(pathname, cmdset, ev) == -1)
 	{
@@ -100,8 +96,7 @@ int	exec_cmd(t_pipex *p, char *cmd, char **ev)
 		ft_putendl_fd(": command not found", 2);
 		free_arrs(cmdset);
 //		free(pathname);
-		close_fds(p);
-		exit(failure);
+		return (failure);
 	}
 	return (failure);
 }
