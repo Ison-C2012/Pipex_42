@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 23:11:26 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/05 15:29:03 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/05 19:34:21 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,20 @@ static char	**get_paths_from_envp(char **ev)
 	return (NULL);
 }
 
-static void	free_arrs(char **arrs)
+static char	*create_pathname(char *onepath, char *name)
+{
+	char	*path;
+	char	*pathname;
+
+	path = ft_strjoin(onepath, "/");
+	if (path == NULL)
+		return (NULL);
+	pathname = ft_strjoin(path, name);
+	free(path);
+	return (pathname);
+}
+
+static char	*free_arrs_ret_s(char **arrs, char *s)
 {
 	char	**tmp;
 
@@ -38,41 +51,36 @@ static void	free_arrs(char **arrs)
 	while (*arrs)
 		free(*arrs++);
 	free(tmp);
-}
-
-static char	*free_path(char *path, char **paths)
-{
-	free(path);
-	free_arrs(paths);
-	return (NULL);
+	return (s);
 }
 
 static char	*get_pathname(char *name, char **ev)
 {
-	t_path	pt;
+	char	*pathname;
+	char	**pathset;
+	char	**to_free;
 
-	pt.paths = get_paths_from_envp(ev);
-	if (pt.paths == NULL)
-		return (NULL);
-	pt.to_free = pt.paths;
-	while (*pt.paths != NULL)
+	if (ft_strchr(name, '/'))
 	{
-		pt.path = ft_strjoin(*pt.paths, "/");
-		if (pt.path == NULL)
-			return (free_path(pt.path, pt.to_free));
-		pt.pathname = ft_strjoin(pt.path, name);
-		if (pt.pathname == NULL)
-			return (free_path(pt.path, pt.to_free));
-		if (access(pt.pathname, X_OK) == success)
-			break ;
-		free(pt.path);
-		free(pt.pathname);
-		pt.paths++;
+		if (access(name, X_OK) == success)
+			return (name);
+		return (NULL);
 	}
-	if (pt.paths == NULL)
-		return (free_path(pt.path, pt.to_free));
-	free_arrs(pt.to_free);
-	return (pt.pathname);
+	pathset = get_paths_from_envp(ev);
+	if (pathset == NULL)
+		return (NULL);
+	to_free = pathset;
+	while (*pathset != NULL)
+	{
+		pathname = create_pathname(*pathset, name);
+		if (pathname == NULL)
+			return (free_arrs_ret_s(to_free, NULL));
+		if (access(pathname, X_OK) == success)
+			return (free_arrs_ret_s(to_free, pathname));
+		free(pathname);
+		pathset++;
+	}
+	return (free_arrs_ret_s(to_free, NULL));
 }
 
 int	exec_command(char *cmd, char **ev)
@@ -80,21 +88,25 @@ int	exec_command(char *cmd, char **ev)
 	char	**cmdset;
 	char	*pathname;
 
+	if (*cmd == '\0')
+		return (failure);
 	cmdset = ft_split(cmd, ' ');
-//	cmdset = get_cmdset(cmd);
 	if (cmdset == NULL)
 		return (failure);
 	pathname = get_pathname(cmdset[0], ev);
 	if (pathname == NULL)
 	{
-		free_arrs(cmdset);
+		if (errno == ENOENT || errno == ENOTDIR)
+			err_message(cmdset[0], ": command not found");
+		else
+			perror(cmdset[0]);
+		free_arrs_ret_s(cmdset, NULL);
 		return (failure);
 	}
 	if (execve(pathname, cmdset, ev) == -1)
 	{
-		ft_putstr_fd(cmdset[0], 2);
-		ft_putendl_fd(": command not found", 2);
-		free_arrs(cmdset);
+		perror(cmdset[0]);
+		free_arrs_ret_s(cmdset, NULL);
 		return (failure);
 	}
 	return (failure);

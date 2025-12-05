@@ -1,19 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmdset.c                                           :+:      :+:    :+:   */
+/*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: keitotak <keitotak@student.42tokyo.jp      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/03 23:52:44 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/04 00:02:16 by keitotak         ###   ########.fr       */
+/*   Created: 2025/12/05 17:56:59 by keitotak          #+#    #+#             */
+/*   Updated: 2025/12/05 19:16:24 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char	**get_cmdset(char *cmd)
+bool	include_quote(char *str)
 {
-	char	**cmdset;
+	while (*str)
+	{
+		if (*str == '\'' || *str == '\"')
+			return (true);
+		str++;
+	}
+	return (false);
+}
 
+void	err_message(char *name, char *text)
+{
+	ft_putstr_fd(name, 2);
+	ft_putendl_fd(text, 2);
 }

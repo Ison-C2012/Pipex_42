@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:58:59 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/05 11:54:58 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/05 18:35:08 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <stdbool.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <errno.h>
 
 # define SUCCESS 0
 # define FAILURE 1
@@ -37,14 +38,6 @@ typedef enum s_bool
 	success,
 	failure
 }	t_bool;
-
-typedef struct s_path
-{
-	char	**paths;
-	char	**to_free;
-	char	*path;
-	char	*pathname;
-}	t_path;
 
 typedef struct s_pipex
 {
@@ -60,15 +53,19 @@ typedef struct s_pipex
 }	t_pipex;
 
 // pipex.c
-int	pipex(char **av, char **ev);
+int		pipex(char **av, char **ev);
 
 // process.c
-int	fork_process(t_pipex *p, char **ev, int p_nbr);
+int		fork_process(t_pipex *p, char **ev, int p_nbr);
 
 // exec.c
-int	exec_command(char *cmd, char **ev);
+int		exec_command(char *cmd, char **ev);
 
 //wait.c
-int	wait_for_children(t_pipex *p);
+int		wait_for_children(t_pipex *p);
+
+//helper.c
+bool	include_quote(char *str);
+void	err_message(char *name, char *text);
 
 #endif

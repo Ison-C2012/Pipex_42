@@ -14,7 +14,8 @@ SRCS	:= 	main.c \
 			pipex.c \
 			process.c \
 			exec.c \
-			wait.c
+			wait.c \
+			helper.c
 OBJS	:= $(SRCS:%.c=$(OBJDIR)/%.o)
 ARCS	:= libft.a
 
