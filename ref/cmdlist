@@ -1,0 +1,3 @@
+./pipex /etc/passwd "cat -e" "sed s/:/$/g" outfile
+valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --trace-children-skip=/bin/*,/usr/bin/*,/usr/sbin/* ./pipex /etc/passwd "cat -e" "grep bash" outfile
+./pipex cmdlist "sed s/p sh/p bash/g" "grep bash" outfile
