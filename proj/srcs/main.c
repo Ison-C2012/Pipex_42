@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:56:57 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/05 20:32:13 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/06 11:16:29 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ int	main(int argc, char **argv, char **envp)
 	{
 		ft_putstr_fd("\e[33m", 2);
 		ft_putendl_fd("This program doesn't work with quotes in command.", 2);
-		ft_putendl_fd("Please try commands without quotes.\e[0m", 2);
+		ft_putendl_fd("Please try commands without quotes.", 2);
 		ft_putstr_fd("DOESN\'T WORK:\t", 2);
-		ft_putstr_fd("\e[33m./pipex file1 \"grep \'de <stdio\'\"", 2);
+		ft_putstr_fd("./pipex file1 \"grep \'stdio\'\"", 2);
 		ft_putendl_fd(" \"sed \'s/stdio/unistd/g\'\" file2\e[0m", 2);
-		ft_putstr_fd("DO WORK:\t\e[32m./pipex file1 \"grep <stdio\"", 2);
+		ft_putstr_fd("\e[32mDO WORK:\t./pipex file1 \"grep stdio\"", 2);
 		ft_putendl_fd(" \"sed s/stdio/unistd/g\" file2\e[0m", 2);
 		return (EXIT_FAILURE);
 	}
