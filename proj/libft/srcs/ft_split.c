@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 12:59:58 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/06 11:57:10 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/06 13:51:07 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ static size_t	word_count(char const *s, char c)
 	size_t	cnt;
 	int		flg;
 
-	if (*s == '\0')
-		return (1);
 	cnt = 0;
 	flg = 1;
 	while (*s)
@@ -67,9 +65,9 @@ char	**ft_split(char const *s, char c)
 	size_t	len;
 	size_t	i;
 
-	if (*s == '\0')
-		return (null_string());
 	cnt = word_count(s, c);
+	if (cnt == 0)
+		return (null_string());
 	arr = (char **)ft_calloc(cnt + 1, sizeof(char *));
 	if (arr == NULL)
 		return (NULL);

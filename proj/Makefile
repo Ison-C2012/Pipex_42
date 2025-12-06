@@ -27,7 +27,7 @@ debug: CFLAGS=-g3 -Wall -Wextra -Werror
 debug: $(NAME)
 
 memory: RULE=memory
-memory: CC=gcc -O0
+memory: CC=cc
 memory: CFLAGS=-Wall -Wextra -Werror -fsanitize=address
 memory: $(NAME)
 

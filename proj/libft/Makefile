@@ -67,11 +67,11 @@ MKDIR	:= mkdir -p
 
 all: $(NAME)
 
-debug: CC=gcc -O0
+debug: CC=gcc
 debug: CFLAGS=-g3 -Wall -Wextra -Werror
 debug: $(NAME)
 
-memory: CC=gcc
+memory: CC=cc
 memory: CFLAGS=-Wall -Wextra -Werror -fsanitize=address
 memory: $(NAME)
 
