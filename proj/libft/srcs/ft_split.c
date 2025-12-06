@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 12:59:58 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/02 11:33:15 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/06 11:57:10 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ static size_t	word_count(char const *s, char c)
 	size_t	cnt;
 	int		flg;
 
+	if (*s == '\0')
+		return (1);
 	cnt = 0;
 	flg = 1;
 	while (*s)
@@ -45,6 +47,19 @@ static size_t	word_count(char const *s, char c)
 	return (cnt);
 }
 
+static char	**null_string(void)
+{
+	char	**arr;
+
+	arr = ft_calloc(2, sizeof(char *));
+	if (arr == NULL)
+		return (NULL);
+	arr[0] = ft_strdup("");
+	if (arr[0] == NULL)
+		return (NULL);
+	return (arr);
+}
+
 char	**ft_split(char const *s, char c)
 {
 	char	**arr;
@@ -52,6 +67,8 @@ char	**ft_split(char const *s, char c)
 	size_t	len;
 	size_t	i;
 
+	if (*s == '\0')
+		return (null_string());
 	cnt = word_count(s, c);
 	arr = (char **)ft_calloc(cnt + 1, sizeof(char *));
 	if (arr == NULL)
@@ -65,10 +82,9 @@ char	**ft_split(char const *s, char c)
 		while (s[len] && s[len] != c)
 			len++;
 		arr[i] = ft_substr(s, 0, len);
-		if (arr[i] == NULL)
+		if (arr[i++] == NULL)
 			return (free_array(arr));
 		s += len;
-		i++;
 	}
 	return (arr);
 }

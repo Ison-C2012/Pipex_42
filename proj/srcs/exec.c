@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 23:11:26 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/05 20:55:45 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/06 12:18:17 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,8 @@ static char	*get_pathname(char *name, char **ev)
 	char	**pathset;
 	char	**to_free;
 
-	if (ft_strchr(name, '/'))
-	{
-		if (access(name, X_OK) == success)
-			return (name);
-		return (NULL);
-	}
+	if (access(name, X_OK) == success)
+		return (name);
 	pathset = get_paths_from_envp(ev);
 	if (pathset == NULL)
 		return (NULL);
@@ -98,14 +94,14 @@ int	exec_command(char *cmd, char **ev)
 	{
 		if (errno == ENOENT || errno == ENOTDIR)
 			handle_noexist_cmd(cmdset);
-		free_arrs_ret_s(cmdset, NULL);
 		perror(cmdset[0]);
+		free_arrs_ret_s(cmdset, NULL);
 		return (failure);
 	}
 	if (execve(pathname, cmdset, ev) == -1)
 	{
-		free_arrs_ret_s(cmdset, NULL);
 		perror(cmdset[0]);
+		free_arrs_ret_s(cmdset, NULL);
 		return (failure);
 	}
 	return (failure);
