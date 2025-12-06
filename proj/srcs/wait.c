@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 20:34:18 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/05 20:40:14 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/06 16:00:32 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ static int	status_code(int status)
 
 int	wait_for_children(t_pipex *p)
 {
-	int	code;
 	int	wstatus;
 
 	if (waitpid(p->pid1, NULL, 0) == error)
@@ -38,6 +37,5 @@ int	wait_for_children(t_pipex *p)
 		perror("waitpid");
 		return (failure);
 	}
-	code = status_code(wstatus);
-	return (code);
+	return (status_code(wstatus));
 }

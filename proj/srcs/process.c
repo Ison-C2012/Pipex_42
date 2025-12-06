@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 22:26:17 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/05 18:41:49 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/06 16:02:56 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	child1(t_pipex *p, char **ev)
 		exit_close_fds(p->i_fd, p->p_fd[1]);
 	}
 	if (exec_command(p->cmd1, ev) == failure)
-		exit(EXIT_FAILURE);
+		exit_close_fds(p->o_fd, p->p_fd[0]);
 }
 
 static void	child2(t_pipex *p, char **ev)
@@ -50,6 +50,7 @@ static void	child2(t_pipex *p, char **ev)
 	if (p->o_fd == error)
 	{
 		perror(p->outfile);
+		close(p->p_fd[0]);
 		exit(EXIT_FAILURE);
 	}
 	if (dup2(p->p_fd[0], STDIN) < 0)

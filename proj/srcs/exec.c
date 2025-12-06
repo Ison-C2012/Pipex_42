@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 23:11:26 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/06 15:28:09 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/06 15:54:00 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	exec_command(char *cmd, char **ev)
 	}
 	if (execve(pathname, cmdset, ev) == -1)
 	{
-		if (errno == ENOENT || errno == ENOTDIR)
+		if (errno == ENOENT)
 			handle_noexist_cmd(cmdset);
 		perror(cmdset[0]);
 		free_arrs_ret_s(cmdset, NULL);

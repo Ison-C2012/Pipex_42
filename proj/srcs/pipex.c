@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 12:07:47 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/06 11:30:21 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/06 15:45:37 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	pipex(char **av, char **ev)
 	if (pipe(p.p_fd) == error)
 	{
 		perror("pipe");
-		return (failure);
+		return (EXIT_FAILURE);
 	}
 	p.pid1 = fork_process(&p, ev, 1);
 	p.pid2 = fork_process(&p, ev, 2);
