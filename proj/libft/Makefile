@@ -79,7 +79,7 @@ $(NAME): $(OBJS)
 	$(AR) $(ARFLAGS) $@ $?
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
-	$(MKDIR) $(dir $@)
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -I $(INCDIR) -c $< -o $@
 
 clean: 

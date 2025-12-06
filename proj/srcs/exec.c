@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 23:11:26 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/06 15:54:00 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/06 16:46:29 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,23 +86,23 @@ int	exec_command(char *cmd, char **ev)
 
 	cmdset = ft_split(cmd, ' ');
 	if (cmdset == NULL)
-		return (failure);
+		return (EXIT_FAILURE);
 	if (**cmdset == '\0')
-		handle_noexist_cmd(cmdset);
+		return (handle_noexist_cmd(cmdset));
 	pathname = get_pathname(cmdset[0], ev);
 	if (pathname == NULL)
 	{
 		perror(cmdset[0]);
 		free_arrs_ret_s(cmdset, NULL);
-		return (failure);
+		return (EXIT_FAILURE);
 	}
 	if (execve(pathname, cmdset, ev) == -1)
 	{
 		if (errno == ENOENT)
-			handle_noexist_cmd(cmdset);
+			return (handle_noexist_cmd(cmdset));
 		perror(cmdset[0]);
 		free_arrs_ret_s(cmdset, NULL);
-		return (failure);
+		return (EXIT_FAILURE);
 	}
-	return (failure);
+	return (EXIT_FAILURE);
 }

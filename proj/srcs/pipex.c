@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 12:07:47 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/06 15:45:37 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/06 16:39:52 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	pipex(char **av, char **ev)
 	}
 	p.pid1 = fork_process(&p, ev, 1);
 	p.pid2 = fork_process(&p, ev, 2);
-	close(p.p_fd[1]);
 	close(p.p_fd[0]);
+	close(p.p_fd[1]);
 	return (wait_for_children(&p));
 }

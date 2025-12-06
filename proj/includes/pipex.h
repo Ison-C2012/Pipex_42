@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:58:59 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/05 20:56:38 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/06 16:48:15 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,8 @@
 # include <sys/wait.h>
 # include <errno.h>
 
-# define SUCCESS 0
-# define FAILURE 1
 # define STDIN 0
 # define STDOUT 1
-# define STDERR 2
 
 typedef enum s_bool
 {
@@ -67,6 +64,6 @@ int		wait_for_children(t_pipex *p);
 
 //helper.c
 bool	include_quote(char *str);
-void	handle_noexist_cmd(char **cmdset);
+int		handle_noexist_cmd(char **cmdset);
 
 #endif

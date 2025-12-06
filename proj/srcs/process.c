@@ -6,17 +6,17 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 22:26:17 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/06 16:02:56 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/06 16:54:56 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-static void	exit_close_fds(pid_t pid1, pid_t pid2)
+static void	exit_close_fds(pid_t pid1, pid_t pid2, int exit_code)
 {
 	close(pid1);
 	close(pid2);
-	exit(EXIT_FAILURE);
+	exit(exit_code);
 }
 
 static void	child1(t_pipex *p, char **ev)
@@ -32,15 +32,14 @@ static void	child1(t_pipex *p, char **ev)
 	if (dup2(p->i_fd, STDIN) == error)
 	{
 		perror("dup2");
-		exit_close_fds(p->i_fd, p->p_fd[1]);
+		exit_close_fds(p->i_fd, p->p_fd[1], EXIT_FAILURE);
 	}
 	if (dup2(p->p_fd[1], STDOUT) == error)
 	{
 		perror("dup2");
-		exit_close_fds(p->i_fd, p->p_fd[1]);
+		exit_close_fds(p->i_fd, p->p_fd[1], EXIT_FAILURE);
 	}
-	if (exec_command(p->cmd1, ev) == failure)
-		exit_close_fds(p->o_fd, p->p_fd[0]);
+	exit_close_fds(p->i_fd, p->p_fd[1], exec_command(p->cmd1, ev));
 }
 
 static void	child2(t_pipex *p, char **ev)
@@ -56,15 +55,14 @@ static void	child2(t_pipex *p, char **ev)
 	if (dup2(p->p_fd[0], STDIN) < 0)
 	{
 		perror("dup2");
-		exit_close_fds(p->o_fd, p->p_fd[0]);
+		exit_close_fds(p->o_fd, p->p_fd[0], EXIT_FAILURE);
 	}
 	if (dup2(p->o_fd, STDOUT) < 0)
 	{
 		perror("dup2");
-		exit_close_fds(p->o_fd, p->p_fd[0]);
+		exit_close_fds(p->o_fd, p->p_fd[0], EXIT_FAILURE);
 	}
-	if (exec_command(p->cmd2, ev) == failure)
-		exit_close_fds(p->o_fd, p->p_fd[0]);
+	exit_close_fds(p->o_fd, p->p_fd[0], exec_command(p->cmd2, ev));
 }
 
 int	fork_process(t_pipex *p, char **ev, int p_nbr)
