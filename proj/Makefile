@@ -4,7 +4,7 @@ RULE := all
 
 CC := cc
 CFLAGS := -Wall -Wextra -Werror
-IFLAGS := -Iincludes
+IFLAGS := -I includes -I libft/includes
 
 SRCDIR := srcs
 OBJDIR := objs

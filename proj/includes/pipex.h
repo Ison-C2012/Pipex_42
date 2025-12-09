@@ -6,16 +6,16 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:58:59 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/06 16:48:15 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:52:12 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
 
-# include "../libft/includes/libft.h"
-# include "../libft/includes/libft_bonus.h"
-# include "../libft/includes/ft_printf.h"
+# include "libft.h"
+# include "libft_bonus.h"
+# include "ft_printf.h"
 
 # include <unistd.h>
 # include <fcntl.h>
