@@ -17,7 +17,7 @@ SRCS	:= 	main.c \
 			wait.c \
 			helper.c
 OBJS	:= $(SRCS:%.c=$(OBJDIR)/%.o)
-ARCS	:= libft.a
+ARCS	:= $(ARCDIR)/libft.a
 
 all: $(NAME)
 
@@ -31,9 +31,11 @@ memory: CC=cc
 memory: CFLAGS=-Wall -Wextra -Werror -fsanitize=address
 memory: $(NAME)
 
-$(NAME): $(OBJS)
+$(NAME): $(ARCS) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(ARCS) $(IFLAGS) $(MLXFLAGS) -o $@
+
+$(ARCS):
 	@make -C $(ARCDIR) $(RULE)
-	$(CC) $(CFLAGS) $^ $(ARCDIR)/$(ARCS) $(IFLAGS) $(MLXFLAGS) -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@mkdir -p $(dir $@)
