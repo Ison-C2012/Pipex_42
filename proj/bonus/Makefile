@@ -42,11 +42,11 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 
 clean:
 	@make -C $(ARCDIR) clean
-	rm -rf $(OBJDIR)
+	@rm -rf $(OBJDIR)
 
 fclean: clean
 	@make -C $(ARCDIR) fclean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
 
