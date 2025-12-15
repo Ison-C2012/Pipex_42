@@ -6,58 +6,45 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:56:57 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/12 11:34:32 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/15 20:03:33 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
-typedef struct s_lstcmd
+t_list	*create_cmdlst(char **cmd, int nbr)
 {
-	char			*name;
-	char			*path;
-	char			*pathname;
-	struct s_lstcmd	*next;
-}	t_lstcmd;
+	t_list	*cmdlst;
+	t_list	*new;
 
-t_lstcmd	*new_lstcmd(char *name)
-{
-	t_lstcmd	*new;
-
-	new = (t_lstcmd *)malloc(sizeof(t_lstcmd));
-	if (new == NULL)
-		return (NULL);
-	new->name = name;
-	return (new);
-}
-
-t_lstcmd	*get_lstcmd(char ***av, int count)
-{
-	t_lstcmd	*cmds;
-	t_lstcmd	*res;
-
-	cmds = new_lstcmd(**av++);
-	if (cmds == NULL)
-		return (NULL);
-	res = cmds;
-	while (--count)
+	cmdlst = ft_lstnew(*cmd++);
+	while (--nbr > 0)
 	{
-		cmds->next = new_lstcmd(**av++);
-		cmds = cmds->next;
+		new = ft_lstnew(*cmd++);
+		if (new == NULL)
+		{
+			ft_lstclear(&cmdlst, free);
+			exit(EXIT_FAILURE);
+		}
+		ft_lstadd_back(&cmdlst, new);
 	}
-	return (res);
+	return (cmdlst);
 }
 
 static void	init_pipex(t_pipex *p, char **av, int ac)
 {
-	p->infile = *av;
-	p->cmds = get_lstcmd(&av[1], ac - 1);
-	p->outfile = *av;
+	p->infile = av[0];
+	p->cmdlst = create_cmdlst(&av[1], ac - 2);
+	p->outfile = av[ac - 1];
+	p->p_fd[0] = -1;
+	p->p_fd[1] = -1;
+	p->status = IN;
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	p;
+	pid_t	pid;
 
 	if (argc < 3)
 		return (EXIT_FAILURE);
@@ -67,10 +54,10 @@ int	main(int argc, char **argv, char **envp)
 		perror("pipe");
 		return (EXIT_FAILURE);
 	}
-/*
-	p.pid1 = fork_process(&p, envp, 1);
+	pid = fork_processes(&p, envp);
+/*	p.pid1 = fork_process(&p, envp, 1);
 	p.pid2 = fork_process(&p, envp, 2);
 */	close(p.p_fd[0]);
 	close(p.p_fd[1]);
-	return (wait_for_children(&p));
+	return (wait_for_children(pid));
 }

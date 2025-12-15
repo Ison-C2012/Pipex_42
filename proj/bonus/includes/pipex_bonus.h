@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:58:59 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/12 11:33:33 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/15 19:56:53 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 
 # define STDIN 0
 # define STDOUT 1
+# define IN 0
+# define OUT 1
 
 typedef enum s_bool
 {
@@ -38,23 +40,22 @@ typedef enum s_bool
 
 typedef struct s_pipex
 {
-	char		*infile;
-	t_lstcmd	*cmds;
-	char		*outfile;
-	int			i_fd;
-	int			o_fd;
-	int			p_fd[2];
+	char	*infile;
+	char	*outfile;
+	t_list	*cmdlst;
+	int		p_fd[2];
+	int		status;
 }	t_pipex;
 
 // process.c
-int		fork_process(t_pipex *p, char **ev, int p_nbr);
+int		fork_processes(t_pipex *p, char **ev);
 
 // exec.c
 int		exec_command(char *cmd, char **ev);
 char	*free_arrs_ret_s(char **arrs, char *s);
 
 //wait.c
-int		wait_for_children(t_pipex *p);
+int		wait_for_children(pid_t pid);
 
 //helper.c
 bool	include_quote(char *str);
