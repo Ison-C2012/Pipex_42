@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 22:26:17 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/15 19:58:09 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/17 18:54:03 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,22 @@ static void	child_in(t_pipex *p, char **ev)
 	exit_close_fds(i_fd, p->p_fd[1], exec_command(p->cmdlst->content, ev));
 }
 
+static void	child_mid(t_pipex *p, char **ev)
+{
+
+	if (dup2(p->p_fd[0], STDIN) < 0)
+	{
+		perror("dup2");
+		exit_close_fds(p->p_fd[0], p->p_fd[1], EXIT_FAILURE);
+	}
+	if (dup2(p->p_fd[1], STDOUT) < 0)
+	{
+		perror("dup2");
+		exit_close_fds(p->p_fd[0], p->p_fd[1], EXIT_FAILURE);
+	}
+	exit_close_fds(p->p_fd[0], p->p_fd[1], exec_command(p->cmdlst->content, ev));
+}
+
 static void	child_out(t_pipex *p, char **ev)
 {
 	int	o_fd;
@@ -69,47 +85,26 @@ static void	child_out(t_pipex *p, char **ev)
 	exit_close_fds(o_fd, p->p_fd[0], exec_command(p->cmdlst->content, ev));
 }
 
-static void	child_mid(t_pipex *p, char **ev)
+int	fork_processes(t_pipex *p, char **ev, int n)
 {
-	if (dup2(p->p_fd[0], STDIN) < 0)
-	{
-		perror("dup2");
-		exit_close_fds(p->p_fd[0], p->p_fd[1], EXIT_FAILURE);
-	}
-	if (dup2(p->p_fd[1], STDOUT) < 0)
-	{
-		perror("dup2");
-		exit_close_fds(p->p_fd[0], p->p_fd[1], EXIT_FAILURE);
-	}
-	exit_close_fds(p->p_fd[0], p->p_fd[1], exec_command(p->cmdlst->content, ev));
-}
-
-int	fork_processes(t_pipex *p, char **ev)
-{
-	pid_t	pid;
-
-	pid = fork();
-	if (pid < 0)
+	p->child_pnbr++;
+	p->pidarr[n] = fork();
+	if (p->pidarr[n] < 0)
 	{
 		perror("fork");
-		close(p->p_fd[0]);
-		close(p->p_fd[1]);
-		exit(EXIT_FAILURE);
+		return (-1);
 	}
-	if (pid == 0)
+	if (p->pidarr[n] == 0)
 	{
-		if (p->status == IN)
+		if (n == 0)
 			child_in(p, ev);
-		else if (p->status == OUT)
+		else if (n == p->forkcnt - 1)
 			child_out(p, ev);
 		else
 			child_mid(p, ev);
 	}
 	p->cmdlst = p->cmdlst->next;
-	if (p->cmdlst->next == NULL)
-		p->status = OUT;
-	if (p->cmdlst)
-		fork_processes(p, ev);
-	return (pid);
+	if (p->cmdlst != NULL)
+		fork_processes(p, ev, n + 1);
+	return (success);
 }
-

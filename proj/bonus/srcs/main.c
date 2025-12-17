@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:56:57 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/15 20:03:33 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/17 17:46:48 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,42 @@ t_list	*create_cmdlst(char **cmd, int nbr)
 	return (cmdlst);
 }
 
+int	*create_pidarr(int nbr)
+{
+	int	*pidarr;
+	int	i;
+
+	pidarr = (int *)malloc(nbr * sizeof(int));
+	if (pidarr == NULL)
+		return (NULL);
+	i = 0;
+	while (i < nbr)
+		pidarr[i++] = -1;
+	return (pidarr);
+}
+
 static void	init_pipex(t_pipex *p, char **av, int ac)
 {
 	p->infile = av[0];
-	p->cmdlst = create_cmdlst(&av[1], ac - 2);
 	p->outfile = av[ac - 1];
 	p->p_fd[0] = -1;
 	p->p_fd[1] = -1;
-	p->status = IN;
+	p->forkcnt = ac - 2;
+	p->child_pnbr = 0;
+	p->cmdlst = create_cmdlst(&av[1], p->forkcnt);
+	p->pidarr = create_pidarr(p->forkcnt);
+}
+
+void	cleanup(t_list *lst, int *arr)
+{
+	ft_lstclear(&lst, free);
+	free(arr);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	p;
-	pid_t	pid;
+	int		exit_code;
 
 	if (argc < 3)
 		return (EXIT_FAILURE);
@@ -54,10 +76,16 @@ int	main(int argc, char **argv, char **envp)
 		perror("pipe");
 		return (EXIT_FAILURE);
 	}
-	pid = fork_processes(&p, envp);
-/*	p.pid1 = fork_process(&p, envp, 1);
-	p.pid2 = fork_process(&p, envp, 2);
-*/	close(p.p_fd[0]);
+	if (fork_processes(&p, envp, 0) == error)
+	{
+		close(p.p_fd[0]);
+		close(p.p_fd[1]);
+		cleanup(p.cmdlst, p.pidarr);
+		return (EXIT_FAILURE);
+	}
+	close(p.p_fd[0]);
 	close(p.p_fd[1]);
-	return (wait_for_children(pid));
+	exit_code = wait_for_children(p.pidarr, p.forkcnt);
+	cleanup(p.cmdlst, p.pidarr);
+	return (exit_code);
 }

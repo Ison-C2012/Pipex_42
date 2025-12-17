@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:58:59 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/15 19:56:53 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/17 17:08:17 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,27 +38,34 @@ typedef enum s_bool
 	failure
 }	t_bool;
 
+typedef struct s_pids
+{
+	pid_t	value;
+	void	*next;
+}	t_pids;
+
 typedef struct s_pipex
 {
 	char	*infile;
 	char	*outfile;
-	t_list	*cmdlst;
 	int		p_fd[2];
-	int		status;
+	int		forkcnt;
+	int		child_pnbr;
+	t_list	*cmdlst;
+	int		*pidarr;
 }	t_pipex;
 
 // process.c
-int		fork_processes(t_pipex *p, char **ev);
+int		fork_processes(t_pipex *p, char **ev, int n);
 
 // exec.c
 int		exec_command(char *cmd, char **ev);
 char	*free_arrs_ret_s(char **arrs, char *s);
 
 //wait.c
-int		wait_for_children(pid_t pid);
+int		wait_for_children(int *pidarr, int nbr);
 
 //helper.c
-bool	include_quote(char *str);
 int		handle_noexist_cmd(char **cmdset);
 
 #endif

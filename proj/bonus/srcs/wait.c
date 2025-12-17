@@ -6,7 +6,7 @@
 /*   By: keitotak <keitotak@student.42tokyo.jp      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 20:34:18 by keitotak          #+#    #+#             */
-/*   Updated: 2025/12/15 19:51:05 by keitotak         ###   ########.fr       */
+/*   Updated: 2025/12/17 18:22:25 by keitotak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,25 @@ static int	status_code(int status)
 	return (code);
 }
 
-int	wait_for_children(pid_t pid)
+int	wait_for_children(int *pidarr, int nbr)
 {
 	int	wstatus;
+	int	res;
+	int	i;
 
-	if (waitpid(pid, &wstatus, 0) == error)
+	i = 0;
+	while (i < nbr)
 	{
-		perror("waitpid");
-		return (failure);
+		if (i == nbr - 1)
+			res = waitpid(pidarr[i], &wstatus, 0);
+		else
+			res = waitpid(pidarr[i], NULL, 0);
+		if (res == error)
+		{
+			perror("waitpid");
+			return (failure);
+		}
+		i++;
 	}
 	return (status_code(wstatus));
 }
